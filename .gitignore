@@ -34,6 +34,8 @@ out/
 test-results/
 playwright-report/
 coverage/
+.playwright-cli/
+.playwright-mcp/
 
 # Claude Code worktrees
 .claude/worktrees/
