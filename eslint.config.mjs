@@ -56,6 +56,7 @@ export default tseslint.config(
     rules: {
       "playwright/no-skipped-test": "error",
       "playwright/no-conditional-in-test": "error",
+      "playwright/no-wait-for-timeout": "error",
     },
   },
 );

@@ -22,15 +22,13 @@ dist-ssr
 *.sln
 *.sw?
 
-# provisioning state (contains passwords)
-scripts/.provision-*.json
-
-# wrangler files
-.wrangler
-.dev.vars*
-!.dev.vars.example
+# Environment
 .env*
 !.env.example
+
+# Next.js
+.next/
+out/
 
 # Claude Code worktrees
 .claude/worktrees/
