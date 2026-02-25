@@ -7,7 +7,7 @@ This project uses [husky](https://typicode.github.io/husky/) to run automated ch
 | Hook | What it does |
 |------|-------------|
 | `pre-commit` | Blocks direct commits to `main` and reserved worktree branches (A–G) |
-| `pre-push` | Blocks pushes of worktree branches, checks rebase conflicts against `origin/main`, then runs `npm run test:all` |
+| `pre-push` | Blocks pushes of worktree branches, checks rebase conflicts against `origin/main` |
 
 ## How it works
 

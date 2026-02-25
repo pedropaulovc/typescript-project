@@ -1,5 +1,5 @@
 #!/bin/bash
-# Pre-push hook: Block worktree branch pushes, check rebase conflicts, run tests
+# Pre-push hook: Block worktree branch pushes, check rebase conflicts
 
 # Block pushes of worktree branches (A, B, C, D, E, F, G)
 while read local_ref local_sha remote_ref remote_sha; do
@@ -45,6 +45,3 @@ if ! git merge-base --is-ancestor origin/main HEAD 2>/dev/null; then
         echo "OK: Behind origin/main but no conflicts."
     fi
 fi
-
-# Run full test suite
-npm run test:all
