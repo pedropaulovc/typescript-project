@@ -108,8 +108,8 @@ There are multiple instances of Claude Code running in parallel. Each one has mu
 - **Merge strategy**: Only merge commits are allowed (`gh pr merge --merge`). Squash and rebase merge are disabled.
 - **Branch must be up to date**: PRs must be up to date with `main` before merging (strict status checks).
 - **Updating PR branches**: Always rebase onto `main` (`git pull --rebase origin main`), never merge `main` into your branch. This keeps history linear on the branch.
-- **Do not bypass branch policies**: Branch protection rules exist for a reason. Never use `--admin` or any other mechanism to bypass required status checks, required reviews, or merge restrictions unless the user has explicitly authorized it for a specific operation.
-- **Do not bypass git hooks**: Pre-commit and pre-push hooks enforce project standards. Never use `--no-verify` to skip them. If a hook fails, fix the underlying issue.
+- **Do not bypass branch policies**: Branch protection rules exist for a reason. Never use `--admin` or any other mechanism to bypass required status checks, required reviews, or merge restrictions. If a policy blocks you, fix the underlying issue. Only bypass if the user has explicitly authorized it for a specific operation.
+- **Do not bypass git hooks**: Pre-commit and pre-push hooks enforce project standards. Never use `--no-verify` to skip them. If a hook fails, fix the underlying issue. Only bypass if the user has explicitly authorized it for a specific operation.
 
 ## Agent Workflow Standards
 
