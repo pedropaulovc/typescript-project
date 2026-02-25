@@ -13,7 +13,8 @@
     "test:watch": "vitest --watch --reporter=dot",
     "test:coverage": "vitest --coverage --reporter=dot",
     "test:e2e": "playwright test --reporter=dot",
-    "test:all": "npm run lint -s && npm run typecheck -s && npm run test -s -- --coverage && npm run test:e2e -s"
+    "test:all": "npm run lint -s && npm run typecheck -s && npm run test -s -- --coverage && npm run test:e2e -s",
+    "prepare": "husky"
   },
   "dependencies": {
     "next": "16.1.6",
@@ -36,6 +37,7 @@
     "eslint-config-next": "16.1.6",
     "eslint-plugin-playwright": "^2.7.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "husky": "^9.1.7",
     "jsdom": "^28.1.0",
     "playwright": "npm:@pedropaulovc/playwright@1.59.0-next.8",
     "playwright-core": "npm:@pedropaulovc/playwright-core@1.59.0-next.8",
