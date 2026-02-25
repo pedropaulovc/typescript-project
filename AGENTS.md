@@ -1,4 +1,4 @@
-# Code Hurdles
+# TypeScript Project
 
 ## Commands
 
