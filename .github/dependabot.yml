@@ -27,3 +27,8 @@ updates:
           - "@eslint/*"
           - "eslint-*"
           - "typescript-eslint"
+    ignore:
+      # ESLint 10.0.x breaks eslint-plugin-react (used by eslint-config-next).
+      # Remove when eslint-config-next supports ESLint 10.
+      - dependency-name: "eslint"
+        versions: [">=10.0.0", "<10.1.0"]
