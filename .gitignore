@@ -30,5 +30,10 @@ dist-ssr
 .next/
 out/
 
+# Test artifacts
+test-results/
+playwright-report/
+coverage/
+
 # Claude Code worktrees
 .claude/worktrees/
