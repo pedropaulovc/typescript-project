@@ -103,6 +103,12 @@ There are multiple instances of Claude Code running in parallel. Each one has mu
 - Validate at system boundaries (API inputs, tool inputs). Trust internal code.
 - Always handle API errors gracefully in the UI (Error Boundaries or Toast Notifications).
 
+## Git Workflow
+
+- **Merge strategy**: Only merge commits are allowed (`gh pr merge --merge`). Squash and rebase merge are disabled.
+- **Branch must be up to date**: PRs must be up to date with `main` before merging (strict status checks).
+- **Updating PR branches**: Always rebase onto `main` (`git pull --rebase origin main`), never merge `main` into your branch. This keeps history linear on the branch.
+
 ## Agent Workflow Standards
 
 ### Stop and Read Policy
