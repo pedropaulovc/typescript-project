@@ -1,15 +1,22 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const isCI = !!process.env.CI;
+
 export default defineConfig({
   testDir: "./e2e",
   outputDir: "./test-results",
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: 0,
-  reporter: process.env.CI ? "dot" : "list",
+  forbidOnly: isCI,
+  retries: isCI ? 0 : 1,
+  timeout: isCI ? 5000 : 10000,
+  expect: {
+    timeout: 2000,
+  },
+  reporter: isCI ? "dot" : "list",
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: `http://localhost:${process.env.E2E_PORT}`,
     trace: "retain-on-failure",
+    actionTimeout: 2000,
   },
   projects: [
     {
@@ -18,9 +25,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npx next dev --turbopack --port 3000",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 30_000,
+    command: "npm run dev",
+    wait: { stdout: /localhost:(?<E2E_PORT>\d+)/ },
+    reuseExistingServer: !isCI,
+    timeout: 60_000,
   },
 });
