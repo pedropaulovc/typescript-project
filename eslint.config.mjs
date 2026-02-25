@@ -5,7 +5,7 @@ import nextConfig from "eslint-config-next/core-web-vitals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: [".next/**/*", "out/**", "build/**", "next-env.d.ts", "playwright-report/**", "coverage/**"] },
+  { ignores: [".next/**/*", ".claude/**/*", "out/**", "build/**", "next-env.d.ts", "playwright-report/**", "coverage/**"] },
   ...nextConfig,
   {
     extends: [js.configs.recommended, ...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylisticTypeChecked],
