@@ -51,7 +51,9 @@ gh api "repos/$REPO" -X PATCH --silent \
   -f allow_merge_commit=true \
   -f allow_squash_merge=false \
   -f allow_rebase_merge=false \
-  -f allow_auto_merge=true
+  -f allow_auto_merge=true \
+  -f merge_commit_title=PR_TITLE \
+  -f merge_commit_message=PR_BODY
 
 # ── Branch ruleset: Protect main ───────────────────────────────────────────────
 upsert_ruleset "Protect main" <<'JSON'
