@@ -14,7 +14,7 @@
     "test:coverage": "vitest --coverage --reporter=dot",
     "test:e2e": "playwright test --reporter=dot",
     "test:all": "npm run lint -s && npm run typecheck -s && npm run test -s -- --coverage && npm run test:e2e -s",
-    "prepare": "husky"
+    "prepare": "node -e \"process.env.MSYS_NO_PATHCONV='1';import('husky').then(m=>process.stdout.write(m.default()))\" --input-type=module"
   },
   "dependencies": {
     "next": "16.1.6",
