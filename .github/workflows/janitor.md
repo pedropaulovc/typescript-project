@@ -21,6 +21,7 @@ safe-outputs:
     title-prefix: "[Janitor] "
     labels: [janitor]
     max: 1
+    protected-files: allowed
   create-issue:
     title-prefix: "[Janitor] "
     labels: [janitor]
@@ -34,7 +35,6 @@ tools:
 
 engine:
   id: copilot
-  model: auto
 ---
 
 # Janitor
