@@ -34,7 +34,7 @@ tools:
 
 engine:
   id: copilot
-  model: gpt-5-codex
+  model: auto
 ---
 
 # Janitor
