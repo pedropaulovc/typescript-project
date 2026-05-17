@@ -28,6 +28,11 @@ safe-outputs:
     max: 2
     close-older-issues: true
 
+network:
+  allowed:
+    - defaults
+    - "cdn.playwright.dev"
+
 tools:
   bash: true
   github:
