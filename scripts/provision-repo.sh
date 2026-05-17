@@ -161,14 +161,20 @@ else
   if gh api "repos/$REPO/actions/secrets/COPILOT_GITHUB_TOKEN" --silent 2>/dev/null; then
     echo "  ✓ COPILOT_GITHUB_TOKEN secret already configured."
   else
+    REPO_SHORT=$(echo "${REPO##*/}" | tr '[:lower:]-' '[:upper:]_')
     echo ""
-    echo "  A fine-grained PAT is needed with:"
-    echo "    - Resource owner: $OWNER"
-    echo "    - Repository access: $REPO"
-    echo "    - Permissions: Copilot (read-only)"
-    echo "    - Expiration: 90 days minimum"
+    echo "  Create a fine-grained PAT at: https://github.com/settings/personal-access-tokens/new"
     echo ""
-    echo "  Create one at: https://github.com/settings/personal-access-tokens/new"
+    echo "  Fill in the fields as follows:"
+    echo "    Token name:         COPILOT_JANITOR_${REPO_SHORT}"
+    echo "    Description:        Copilot CLI for gh-aw janitor"
+    echo "    Resource owner:     $OWNER"
+    echo "    Expiration:         90 days (or Custom for longer)"
+    echo "    Repository access:  Only select repositories → $REPO"
+    echo "    Permissions:        Account permissions → Copilot Requests → Access: Read-only"
+    echo "                        (leave all other permissions blank)"
+    echo ""
+    echo "  Click 'Generate token' and paste the value below."
     echo ""
     read -rp "  Paste the token here (or press Enter to skip): " TOKEN
 
