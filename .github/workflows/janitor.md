@@ -1,11 +1,11 @@
 ---
 description: |
-  Periodic codebase maintenance agent that rotates through housekeeping tasks every 3 days.
+  Periodic codebase maintenance agent that rotates through housekeeping tasks every 7 days.
   Identifies and implements small improvements to code quality, test coverage, documentation,
   and project hygiene without changing behavior.
 
 on:
-  schedule: "0 14 */3 * *"
+  schedule: "0 14 */7 * *"
   workflow_dispatch:
 
 timeout-minutes: 30
@@ -31,6 +31,9 @@ tools:
   bash: true
   github:
     toolsets: [default]
+
+features:
+  copilot-requests: true
 
 engine:
   id: copilot
