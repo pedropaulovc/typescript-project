@@ -126,4 +126,10 @@ upsert_ruleset "Immutable tags" <<'JSON'
 }
 JSON
 
-echo "Done. Rulesets applied to $REPO."
+# ── Security settings ──────────────────────────────────────────────────────────
+echo "  Enabling secret scanning and push protection ..."
+gh api "repos/$REPO" -X PATCH --silent \
+  -f security_and_analysis[secret_scanning][status]=enabled \
+  -f security_and_analysis[secret_scanning_push_protection][status]=enabled
+
+echo "Done. Rulesets and security settings applied to $REPO."
