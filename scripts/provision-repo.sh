@@ -87,6 +87,13 @@ upsert_ruleset "Protect main" <<'JSON'
       }
     },
     {
+      "type": "copilot_code_review",
+      "parameters": {
+        "review_on_push": true,
+        "review_draft_pull_requests": false
+      }
+    },
+    {
       "type": "required_status_checks",
       "parameters": {
         "do_not_enforce_on_create": false,
@@ -126,4 +133,10 @@ upsert_ruleset "Immutable tags" <<'JSON'
 }
 JSON
 
-echo "Done. Rulesets applied to $REPO."
+# ── Security settings ──────────────────────────────────────────────────────────
+echo "  Enabling secret scanning and push protection ..."
+gh api "repos/$REPO" -X PATCH --silent \
+  -f security_and_analysis[secret_scanning][status]=enabled \
+  -f security_and_analysis[secret_scanning_push_protection][status]=enabled
+
+echo "Done. Rulesets and security settings applied to $REPO."
