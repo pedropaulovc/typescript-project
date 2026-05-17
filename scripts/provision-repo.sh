@@ -55,10 +55,10 @@ gh api "repos/$REPO" -X PATCH --silent \
   -f merge_commit_title=PR_TITLE \
   -f merge_commit_message=PR_BODY
 
-echo "  Allowing Actions to create PRs (but not approve) ..."
+echo "  Allowing Actions to create and approve PRs ..."
 gh api "repos/$REPO/actions/permissions/workflow" -X PUT --silent \
   -f default_workflow_permissions=write \
-  -F can_approve_pull_request_reviews=false
+  -F can_approve_pull_request_reviews=true
 
 # ── Branch ruleset: Protect main ───────────────────────────────────────────────
 upsert_ruleset "Protect main" <<'JSON'
