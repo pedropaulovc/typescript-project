@@ -139,4 +139,47 @@ gh api "repos/$REPO" -X PATCH --silent \
   -f security_and_analysis[secret_scanning][status]=enabled \
   -f security_and_analysis[secret_scanning_push_protection][status]=enabled
 
+# ── Copilot agent authentication ──────────────────────────────────────────────
+echo "  Configuring Copilot agent authentication ..."
+
+# Check if copilot-requests permission is available (Enterprise Cloud / enrolled orgs).
+OWNER="${REPO%%/*}"
+COPILOT_REQUESTS_AVAILABLE=false
+
+if gh api "orgs/$OWNER/copilot/billing" --silent 2>/dev/null; then
+  COPILOT_REQUESTS_AVAILABLE=true
+fi
+
+if [[ "$COPILOT_REQUESTS_AVAILABLE" == "true" ]]; then
+  echo "  ✓ copilot-requests permission available (org: $OWNER)."
+  echo "    The janitor workflow will use features: copilot-requests: true."
+else
+  echo "  ✗ copilot-requests permission NOT available for this repo."
+  echo "    The janitor workflow requires a COPILOT_GITHUB_TOKEN secret (fine-grained PAT)."
+
+  # Check if secret already exists.
+  if gh api "repos/$REPO/actions/secrets/COPILOT_GITHUB_TOKEN" --silent 2>/dev/null; then
+    echo "  ✓ COPILOT_GITHUB_TOKEN secret already configured."
+  else
+    echo ""
+    echo "  A fine-grained PAT is needed with:"
+    echo "    - Resource owner: $OWNER"
+    echo "    - Repository access: $REPO"
+    echo "    - Permissions: Copilot (read-only)"
+    echo "    - Expiration: 90 days minimum"
+    echo ""
+    echo "  Create one at: https://github.com/settings/personal-access-tokens/new"
+    echo ""
+    read -rp "  Paste the token here (or press Enter to skip): " TOKEN
+
+    if [[ -n "$TOKEN" ]]; then
+      echo "$TOKEN" | gh secret set COPILOT_GITHUB_TOKEN --repo "$REPO"
+      echo "  ✓ COPILOT_GITHUB_TOKEN secret set."
+    else
+      echo "  ⚠ Skipped. The janitor workflow will fail until COPILOT_GITHUB_TOKEN is configured."
+      echo "    Run: echo '<token>' | gh secret set COPILOT_GITHUB_TOKEN --repo $REPO"
+    fi
+  fi
+fi
+
 echo "Done. Rulesets and security settings applied to $REPO."

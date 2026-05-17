@@ -32,9 +32,6 @@ tools:
   github:
     toolsets: [default]
 
-features:
-  copilot-requests: true
-
 engine:
   id: copilot
   model: auto
