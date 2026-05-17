@@ -34,7 +34,6 @@ tools:
 
 engine:
   id: copilot
-  model: auto
 ---
 
 # Janitor
