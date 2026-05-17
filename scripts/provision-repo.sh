@@ -55,6 +55,16 @@ gh api "repos/$REPO" -X PATCH --silent \
   -f merge_commit_title=PR_TITLE \
   -f merge_commit_message=PR_BODY
 
+# Required for the janitor agent (gh-aw) to create PRs via GITHUB_TOKEN.
+# The GitHub API uses a single toggle for both creating AND approving PRs.
+# TODO: decouple when GitHub separates create vs approve in the API.
+# See: https://github.github.com/gh-aw/reference/faq/#why-is-my-create-pull-request-workflow-failing-with-github-actions-is-not-permitted-to-create-or-approve-pull-requests
+# If your org blocks this, alternatives exist:
+#   - protected-files: fallback-to-issue (default) opens an issue with the branch link
+#   - Assign the issue to copilot so Copilot's coding agent creates the PR:
+#       safe-outputs:
+#         create-issue:
+#           assignees: [copilot]
 echo "  Allowing Actions to create and approve PRs ..."
 gh api "repos/$REPO/actions/permissions/workflow" -X PUT --silent \
   -f default_workflow_permissions=write \
