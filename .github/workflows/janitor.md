@@ -37,7 +37,7 @@ features:
 
 engine:
   id: copilot
-  model: claude-opus-4.5
+  model: auto
 ---
 
 # Janitor
