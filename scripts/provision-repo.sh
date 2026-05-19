@@ -46,29 +46,38 @@ upsert_ruleset() {
 }
 
 # ── Repo settings ──────────────────────────────────────────────────────────────
-echo "  Setting merge strategy (merge-only) and auto-merge ..."
+echo "  Setting merge strategy (merge-only), auto-merge, and head branch cleanup ..."
 gh api "repos/$REPO" -X PATCH --silent \
   -f allow_merge_commit=true \
   -f allow_squash_merge=false \
   -f allow_rebase_merge=false \
   -f allow_auto_merge=true \
+  -F delete_branch_on_merge=true \
+  -F allow_update_branch=true \
   -f merge_commit_title=PR_TITLE \
   -f merge_commit_message=PR_BODY
 
-# Required for the janitor agent (gh-aw) to create PRs via GITHUB_TOKEN.
-# The GitHub API uses a single toggle for both creating AND approving PRs.
-# TODO: decouple when GitHub separates create vs approve in the API.
-# See: https://github.github.com/gh-aw/reference/faq/#why-is-my-create-pull-request-workflow-failing-with-github-actions-is-not-permitted-to-create-or-approve-pull-requests
-# If your org blocks this, alternatives exist:
-#   - protected-files: fallback-to-issue (default) opens an issue with the branch link
-#   - Assign the issue to copilot so Copilot's coding agent creates the PR:
-#       safe-outputs:
-#         create-issue:
-#           assignees: [copilot]
-echo "  Allowing Actions to create and approve PRs ..."
-gh api "repos/$REPO/actions/permissions/workflow" -X PUT --silent \
-  -f default_workflow_permissions=write \
-  -F can_approve_pull_request_reviews=true
+echo "  ⚠ For the janitor agent (gh-aw) to create PRs, manually enable:"
+echo "    Settings → Actions → General → Workflow permissions → Read and write"
+echo "    Settings → Actions → General → Allow GitHub Actions to create and approve pull requests"
+
+# ── Human review gate environment ──────────────────────────────────────────────
+# Solo-dev workaround: GitHub blocks PR self-approval, but allows self-approval
+# on environment deployments. The "Human review gate" workflow targets this
+# environment; the ruleset's required_deployments rule blocks merge (including
+# auto-merge) until the approver clicks Approve on the deployment.
+echo "  Configuring pr-review-gate environment (reviewer = current user) ..."
+GATE_REVIEWER_ID=$(gh api user --jq '.id')
+gh api "repos/$REPO/environments/pr-review-gate" -X PUT --silent --input - <<JSON
+{
+  "wait_timer": 0,
+  "prevent_self_review": false,
+  "reviewers": [
+    { "type": "User", "id": $GATE_REVIEWER_ID }
+  ],
+  "deployment_branch_policy": null
+}
+JSON
 
 # ── Branch ruleset: Protect main ───────────────────────────────────────────────
 upsert_ruleset "Protect main" <<'JSON'
@@ -122,6 +131,12 @@ upsert_ruleset "Protect main" <<'JSON'
       }
     },
     {
+      "type": "required_deployments",
+      "parameters": {
+        "required_deployment_environments": ["pr-review-gate"]
+      }
+    },
+    {
       "type": "deletion"
     }
   ]
@@ -147,6 +162,10 @@ upsert_ruleset "Immutable tags" <<'JSON'
   ]
 }
 JSON
+
+# ── Release immutability ──────────────────────────────────────────────────────
+echo "  Enabling release immutability ..."
+gh api "repos/$REPO/immutable-releases" -X PUT --silent
 
 # ── Security settings ──────────────────────────────────────────────────────────
 echo "  Enabling secret scanning and push protection ..."
