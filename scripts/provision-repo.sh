@@ -103,10 +103,10 @@ upsert_ruleset "Protect main" <<'JSON'
       "type": "pull_request",
       "parameters": {
         "allowed_merge_methods": ["merge"],
-        "dismiss_stale_reviews_on_push": true,
+        "dismiss_stale_reviews_on_push": false,
         "require_code_owner_review": false,
-        "require_last_push_approval": true,
-        "required_approving_review_count": 1,
+        "require_last_push_approval": false,
+        "required_approving_review_count": 0,
         "required_review_thread_resolution": false
       }
     },
