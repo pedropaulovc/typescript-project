@@ -61,6 +61,24 @@ echo "  ⚠ For the janitor agent (gh-aw) to create PRs, manually enable:"
 echo "    Settings → Actions → General → Workflow permissions → Read and write"
 echo "    Settings → Actions → General → Allow GitHub Actions to create and approve pull requests"
 
+# ── Human review gate environment ──────────────────────────────────────────────
+# Solo-dev workaround: GitHub blocks PR self-approval, but allows self-approval
+# on environment deployments. The "Human review gate" workflow targets this
+# environment; the ruleset's required_deployments rule blocks merge (including
+# auto-merge) until the approver clicks Approve on the deployment.
+echo "  Configuring pr-review-gate environment (reviewer = current user) ..."
+GATE_REVIEWER_ID=$(gh api user --jq '.id')
+gh api "repos/$REPO/environments/pr-review-gate" -X PUT --silent --input - <<JSON
+{
+  "wait_timer": 0,
+  "prevent_self_review": false,
+  "reviewers": [
+    { "type": "User", "id": $GATE_REVIEWER_ID }
+  ],
+  "deployment_branch_policy": null
+}
+JSON
+
 # ── Branch ruleset: Protect main ───────────────────────────────────────────────
 upsert_ruleset "Protect main" <<'JSON'
 {
@@ -110,6 +128,12 @@ upsert_ruleset "Protect main" <<'JSON'
           { "context": "unit-tests" },
           { "context": "e2e-tests" }
         ]
+      }
+    },
+    {
+      "type": "required_deployments",
+      "parameters": {
+        "required_deployment_environments": ["pr-review-gate"]
       }
     },
     {
