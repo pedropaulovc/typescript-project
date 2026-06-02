@@ -43,7 +43,7 @@ npm run test -- -t "should do X"     # by test name
 - **No flaky tests.** Investigate and fix failures. Never dismiss as "unrelated to my changes".
 - **`waitForTimeout` is banned** (ESLint rule). Use `waitForSelector`, `waitForFunction`, `waitForLoadState`, `waitForURL`, or `waitForEvent`.
 - **Prefer locators over selectors** — they auto-retry and adapt to DOM changes.
-- **Use traces, don't guess.** Load playwright-cli skill, run `npx playwright show-trace --port 0 <trace.zip>`, inspect DOM snapshots in headed mode.
+- **Use traces, don't guess.** Fetch the `trace.zip` from the CI/CD build outputs or the local test output folder and run `npx playwright-trace-llm path/to/trace.zip -o ./trace-export` to export it to LLM-friendly Markdown and HTML — full action timeline, DOM snapshots, errors with stack traces, console, and network. It contains everything in the Playwright trace viewer.
 - **Stress-tested on main.** Every push runs E2E 10x parallel + 10x sequential. Check ci-cd-main workflow history.
 
 ## Manual Testing
