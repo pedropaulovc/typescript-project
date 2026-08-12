@@ -76,6 +76,5 @@ Multiple Claude Code instances run in parallel. Each worktree gets a designated 
 - **Read before coding**: Read relevant specs and source files first.
 - **Fix, don't suppress**: No `// eslint-disable` — fix the root cause. No deleting tests — fix the test or the code.
 - **One task at a time.** Update task tracking in real-time.
-- **Types**: Check `src/types/` first. Use `@/` imports.
+- **Types**: Use `@/` imports.
 - **Verify**: Run `npm run build` + `npm run lint` after significant changes. Visual check with Playwright before claiming done. `gh run watch <run-id>` must be green.
-- **Test data**: Use factories in `src/tests/factories/`.
